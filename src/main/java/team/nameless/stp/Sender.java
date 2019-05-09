@@ -4,21 +4,20 @@ import java.net.*;
 
 public class Sender{
 
-    static int PORT=12500;
-    public static void main(String[] args) throws SocketException {
-        try{
-            DatagramSocket socket = new DatagramSocket(PORT);
+    static int PORT=8888;
+    static String IP="localhost";
+    public static void main(String[] args){
+        String rcvIP=args[0];
+        int rcvPort=Integer.parseInt(args[1]);
+        String filename=args[2];
+        int MSS=Integer.parseInt(args[3]);
 
-            String msg = "沙发凯撒货到付款举案说法凯撒好看";
-            byte[] buffer = msg.getBytes();
-            int msgSize = buffer.length;
-            InetAddress toAdd = InetAddress.getLocalHost();
-            int toPort = 11500;
-
-            DatagramPacket pack = new DatagramPacket(buffer, msgSize, toAdd, toPort);
-            socket.send(pack);
-        } catch (Exception e){
-            System.out.println(e.getMessage());
-        }
+        SenderThread thread=new SenderThread(MSS,PORT,IP);
+        thread.setDes(rcvIP,rcvPort);
+        thread.setData("打撒换个卡老师的金刚护法看电视看了哈电风扇");
+        Thread t1=new Thread(thread);
+        t1.start();
     }
+
+
 }
