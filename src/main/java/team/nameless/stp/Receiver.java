@@ -1,35 +1,31 @@
 package team.nameless.stp;
 
-import java.net.*;
+import java.io.IOException;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
-public class Receiver{
-
-    static int BUFFER_LENGTH=10;
-    static int PORT=8889;
-    public static void main(String[] args) throws SocketException {
+/**
+ * @author Yang ShengYuan
+ * @date 2019/5/6
+ * @Description 驱动ReceiverExecutor执行的类
+ **/
+public class Receiver {
+    public static void main(String args[]){
+        ReceiverExecutor re = null;
+        try {
+            re = new ReceiverExecutor(args);//把参数传递给执行类
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         try {
-            DatagramSocket socket = new DatagramSocket(PORT, InetAddress.getByName("localhost"));
-            while (true) {
-                byte[] buffer = new byte[BUFFER_LENGTH];
-                DatagramPacket pack = new DatagramPacket(buffer, buffer.length);
-
-                socket.receive(pack);
-
-                byte[] data = pack.getData();
-                String msg = new String(data);
-                InetAddress fromAdd = pack.getAddress();
-                int fromPort = pack.getPort();
-
-                System.out.println(msg);
-
-            }
+            re.go();//启动
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-            System.out.println();
-        }
-
-
     }
 }

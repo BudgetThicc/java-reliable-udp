@@ -1,5 +1,6 @@
 package team.nameless.stp;
 
+import java.io.*;
 import java.net.*;
 
 public class Sender{
@@ -11,12 +12,32 @@ public class Sender{
         int rcvPort=Integer.parseInt(args[1]);
         String filename=args[2];
         int MSS=Integer.parseInt(args[3]);
+        int windowSize=Integer.parseInt((args[4]));
 
-        SenderThread thread=new SenderThread(MSS,PORT,IP);
+        SenderThread thread=new SenderThread(windowSize,MSS,PORT,IP);
         thread.setDes(rcvIP,rcvPort);
-        thread.setData("打撒换个卡老师的金刚护法看电视看了哈电风扇");
-        Thread t1=new Thread(thread);
-        t1.start();
+
+        try {
+            thread.setData(readFile(filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Thread t=new Thread(thread);
+        t.start();
+
+    }
+
+    private static byte[] readFile(String filename) throws IOException {
+        BufferedInputStream bis = null;
+        bis = new BufferedInputStream(new FileInputStream(filename));
+        byte[] temp=new byte[10000];
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        int size = 0;
+        while( (size = bis.read(temp)) !=-1){
+            baos.write(temp,0,size);
+        }
+        return baos.toByteArray();
     }
 
 
