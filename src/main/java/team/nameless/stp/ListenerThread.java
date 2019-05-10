@@ -3,6 +3,7 @@ package team.nameless.stp;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 public class ListenerThread implements Runnable{
@@ -20,21 +21,49 @@ public class ListenerThread implements Runnable{
 
     public void run() {
         while (true) {
+            DatagramPacket rcvPacket = new DatagramPacket(this.inSeg, this.inSeg.length);
+            ready();
             try {
-                DatagramPacket rcvPacket = new DatagramPacket(this.inSeg, this.inSeg.length);
                 this.socket.receive(rcvPacket);
-
-                STPsegement rcvSTPsegement = new STPsegement(rcvPacket.getData());
-                System.out.println("receive:  seq:"+rcvSTPsegement.getSeq()+" ack:"+rcvSTPsegement.getAck());
-                int newAck=rcvSTPsegement.getAck();
-                if(acked<newAck){
-                    acked=newAck;
-                    sender.callBackSeq(acked,rcvSTPsegement.getSeq());
-                    System.out.println("acked:"+acked+"seq:"+rcvSTPsegement.getSeq());
-                }
+            } catch (SocketException e) {
+                break;
+                //socket被关闭，直接退出监听，socket若非正常关闭也由sender主线程处理
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            STPsegement rcvSTPsegement = new STPsegement(rcvPacket.getData());
+            System.out.println("receive:  seq:"+rcvSTPsegement.getSeq()+" ack:"+rcvSTPsegement.getAck());
+            if(rcvSTPsegement.getSYN()) {
+                handleSYN();
+            }else if(rcvSTPsegement.getFIN()){
+                handleFIN();
+            }else {
+                handleNorm(rcvSTPsegement);
+            }
+
         }
+    }
+
+    private void handleNorm(STPsegement rcvSTPsegement){
+        int newAck=rcvSTPsegement.getAck();
+        if(acked<newAck){
+            acked=newAck;
+            sender.callBackSeq(acked,rcvSTPsegement.getSeq());
+            System.out.println("CallBack: acked:"+acked+" seq:"+rcvSTPsegement.getSeq());
+        }
+    }
+
+    private void handleSYN(){
+        sender.callBackSYN(true);
+        System.out.println(true);
+    }
+
+    private void handleFIN(){
+        sender.callBackFIN(true);
+    }
+
+    private void ready(){
+        sender.callBackReady();
     }
 }

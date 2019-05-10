@@ -52,7 +52,7 @@ public class ReceiverExecutor {
 
     public  void go() throws IOException {
 
-//        getConnection();
+        getConnection();
 
         while(true){
             InAndOutSTP = new byte[this.MSS+STPheaderSize];

@@ -23,6 +23,10 @@ public class SenderThread implements Runnable{
     int seq;
     int ack;
 
+    Thread listenerThread;
+
+    boolean isFIN,isSYN,readyListen;
+
     SenderThread(int windowSize,int MSS,int port,String ip){
         inSeg=new byte[MSS+HEADER_LENGTH];
         outSeg=new byte[MSS];
@@ -38,7 +42,7 @@ public class SenderThread implements Runnable{
             e.printStackTrace();
         }
 
-        seq=0;
+        seq=100;
         ack=0;
         acked=0;
     }
@@ -60,8 +64,8 @@ public class SenderThread implements Runnable{
 
     private void initListener(){
         ListenerThread listener=new ListenerThread(this);
-        Thread t=new Thread(listener);
-        t.start();
+        listenerThread=new Thread(listener);
+        listenerThread.start();
     }
 
     private void loadWindow(){
@@ -133,14 +137,67 @@ public class SenderThread implements Runnable{
         this.ack=newSeq+1;//ack为确认报文的seq+1
     }
 
+    public void callBackSYN(boolean b){
+        this.isSYN=b;
+    }
+
+    public void callBackFIN(boolean b){
+        this.isFIN=b;
+    }
+
+    public void callBackReady(){
+        this.readyListen=true;
+    }
+
+    private void establish(){
+        try {
+            this.sendSTPSeg(new byte[0], true, false, this.seq, 0);//send SYN the first handshake
+            this.seq++;
+            System.out.print("Handshaking:");
+            while (true) {
+                System.out.print(".");
+                if (this.isSYN) {//等待listener回调
+                    this.sendSTPSeg(new byte[0], false, false, this.seq, this.ack);//send the third handshake
+                    System.out.println();
+                    break;
+                }
+            }
+            System.out.println("////////////SYNed////////////");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+    private void close() {
+        try {
+            sendSTPSeg(new byte[0],false,true,this.seq,this.ack); //F
+            this.seq++;
+            System.out.print("Handshaking:");
+            while(true){//等待listener回调
+                System.out.print(".");
+                if(this.isFIN){//get F+A
+                    this.sendSTPSeg(new byte[0],false,false,this.seq,this.ack);
+                    System.out.println();
+                    break;
+                }
+            }
+            this.socket.close();
+            System.out.println("////////////FINed////////////");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void run(){
         initListener();
+        while(!readyListen){};
+        establish();
         while(socket!=null){
             loadWindow();
             sendWindow();
             if(dataPointer>=data.length&&outWindow.size==0){
+                close();
                 break;
-                //todo:发送FIN
             }
         }
     }
