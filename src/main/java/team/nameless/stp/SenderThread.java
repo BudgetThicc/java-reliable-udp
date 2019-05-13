@@ -15,7 +15,7 @@ public class SenderThread implements Runnable{
     byte[] data;
     int dataPointer;
 
-    static DatagramSocket socket;
+    DatagramSocket socket;
     InetAddress toAdd;
     int toPort;
 
@@ -91,7 +91,6 @@ public class SenderThread implements Runnable{
     }
 
     public synchronized void sendSTPSeg(byte[] data, boolean isSYN, boolean isFIN , int seq, int ack) throws IOException {
-        System.out.println(new String(data));
         STPsegement stpSegement = new STPsegement(data,isSYN,isFIN,seq,ack);
         DatagramPacket outPacket = new DatagramPacket(stpSegement.getByteArray(),
                 stpSegement.getByteArray().length,toAdd,toPort);
@@ -99,6 +98,7 @@ public class SenderThread implements Runnable{
         this.seq+=stpSegement.getDataLength();
         //for debugging.....
         System.out.println("Send: seq:"+seq+" "+"ack:"+ack);
+        System.out.println();
         //for debugging.....
     }
 
@@ -190,7 +190,7 @@ public class SenderThread implements Runnable{
 
     public void run(){
         initListener();
-        while(!readyListen){};
+        while(!readyListen){};//等待listener准备完成
         establish();
         while(socket!=null){
             loadWindow();
