@@ -36,8 +36,10 @@ public class ListenerThread implements Runnable{
             STPsegement rcvSTPsegement = new STPsegement(rcvPacket.getData());
             System.out.println("receive:  seq:"+rcvSTPsegement.getSeq()+" ack:"+rcvSTPsegement.getAck());
             if(rcvSTPsegement.getSYN()) {
+                handleNorm(rcvSTPsegement);
                 handleSYN();
             }else if(rcvSTPsegement.getFIN()){
+                handleNorm(rcvSTPsegement);
                 handleFIN();
             }else {
                 handleNorm(rcvSTPsegement);
@@ -57,7 +59,6 @@ public class ListenerThread implements Runnable{
 
     private void handleSYN(){
         sender.callBackSYN(true);
-        System.out.println(true);
     }
 
     private void handleFIN(){

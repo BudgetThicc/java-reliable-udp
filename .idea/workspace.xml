@@ -2,14 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="22d43684-c58d-4929-9e1d-16cb0c7a5422" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/team/nameless/stp/TimerThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JavaReliableUDP/team/nameless/stp/ListenerThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaReliableUDP/team/nameless/stp/ListenerThread.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/JavaReliableUDP/team/nameless/stp/SenderThread.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaReliableUDP/team/nameless/stp/SenderThread.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/JavaReliableUDP/team/nameless/stp/Window.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/JavaReliableUDP/team/nameless/stp/Window.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/team/nameless/stp/ListenerThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/team/nameless/stp/ListenerThread.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/team/nameless/stp/SenderThread.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/team/nameless/stp/SenderThread.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/store.txt" beforeDir="false" afterPath="$PROJECT_DIR$/store.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -22,7 +20,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/Sender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
+            <state relative-caret-position="250">
               <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -31,11 +29,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="83">
-              <caret line="81" column="26" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
+            <state relative-caret-position="131">
+              <caret line="25" column="9" lean-forward="true" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -43,7 +41,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="jar://C:/Program Files/Java/jdk1.8.0_161/src.zip!/java/net/SocketInputStream.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
+            <state relative-caret-position="-895">
               <caret line="93" column="23" selection-start-line="93" selection-start-column="23" selection-end-line="93" selection-end-column="23" />
             </state>
           </provider>
@@ -61,7 +59,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/SenderThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="128">
+            <state relative-caret-position="2066">
               <caret line="203" column="60" lean-forward="true" selection-start-line="203" selection-start-column="60" selection-end-line="203" selection-end-column="60" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -81,13 +79,15 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/ListenerThread.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="212">
-              <caret line="33" column="13" lean-forward="true" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
+            <state relative-caret-position="285">
+              <caret line="42" column="43" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#1786#1787#0" expanded="true" />
+                <element signature="e#1826#1827#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -135,6 +135,7 @@
       <find>system.</find>
       <find>system</find>
       <find>Window(</find>
+      <find>队列为空</find>
       <find>seq</find>
     </findStrings>
   </component>
@@ -154,9 +155,9 @@
         <option value="$PROJECT_DIR$/data.txt" />
         <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/Sender.java" />
         <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/ReceiverExecutor.java" />
-        <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java" />
         <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/SenderThread.java" />
         <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/TimerThread.java" />
+        <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java" />
         <option value="$PROJECT_DIR$/src/main/java/team/nameless/stp/ListenerThread.java" />
       </list>
     </option>
@@ -216,7 +217,7 @@
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557725411997" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1557736356118" />
     <property name="jdk.selected.JAVA_MODULE" value="1.8" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
@@ -295,12 +296,12 @@
       <workItem from="1557212947370" duration="43000" />
       <workItem from="1557215203568" duration="221000" />
       <workItem from="1557303578227" duration="37653000" />
-      <workItem from="1557722890095" duration="2501000" />
+      <workItem from="1557722890095" duration="4456000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="47884000" />
+    <option name="totallyTimeSpent" value="49839000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
@@ -423,13 +424,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/Sender.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/TimerThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="256">
+          <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
         </state>
       </provider>
     </entry>
@@ -440,23 +438,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/Sender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="83">
-          <caret line="81" column="26" selection-start-line="81" selection-start-column="26" selection-end-line="81" selection-end-column="26" />
+        <state relative-caret-position="250">
+          <caret line="16" column="59" selection-start-line="16" selection-start-column="59" selection-end-line="16" selection-end-column="59" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_161/src.zip!/java/net/SocketInputStream.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
+        <state relative-caret-position="-895">
           <caret line="93" column="23" selection-start-line="93" selection-start-column="23" selection-end-line="93" selection-end-column="23" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/SenderThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="128">
+        <state relative-caret-position="2066">
           <caret line="203" column="60" lean-forward="true" selection-start-line="203" selection-start-column="60" selection-end-line="203" selection-end-column="60" />
           <folding>
             <element signature="imports" expanded="true" />
@@ -466,20 +467,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/TimerThread.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/ListenerThread.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="256">
-          <caret line="21" column="27" lean-forward="true" selection-start-line="21" selection-start-column="27" selection-end-line="21" selection-end-column="27" />
+        <state relative-caret-position="285">
+          <caret line="42" column="43" selection-start-line="42" selection-start-column="43" selection-end-line="42" selection-end-column="43" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1786#1787#0" expanded="true" />
+            <element signature="e#1826#1827#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/ListenerThread.java">
+    <entry file="file://$PROJECT_DIR$/src/main/java/team/nameless/stp/Window.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="212">
-          <caret line="33" column="13" lean-forward="true" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="131">
+          <caret line="25" column="9" lean-forward="true" selection-start-line="25" selection-start-column="9" selection-end-line="25" selection-end-column="9" />
         </state>
       </provider>
     </entry>

@@ -43,7 +43,7 @@ public class Window {
     }
 
     public void clear(int i){//收到ack，window移动，数据退栈
-        //todo：window的剩余delay值计算得出新RTT
+        //如果作业有要求，可根据window中的剩余delay值计算得出新RTT
         i=Math.abs(i);
         if(i>size){
             left=0;
@@ -62,7 +62,7 @@ public class Window {
             element = data[(left+i)%max];
             return element;
         } else {
-            System.out.println("队列为空");
+            System.out.println("get方法队列为空");
         }
         return element;
     }
@@ -73,7 +73,7 @@ public class Window {
             element = delay[(left+i)%max]==0;
             return element;
         } else {
-            System.out.println("队列为空");
+            System.out.println("canSent方法队列为空");
         }
         return false;
     }
