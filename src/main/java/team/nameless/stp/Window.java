@@ -3,14 +3,19 @@ package team.nameless.stp;
 public class Window {
     int left=0;
     int right=0;
+
     byte[] data;
     private int[] delay;
+    private int[] seq;
+
     public int size;
     private final int max;//按作业要求不实现可变窗口，故为了保证安全性max设为final
+
     public Window(int max){
         this.max= max;
         data = new byte[max];
         delay = new int[max];//初始化发送延迟为0，即socket取到后立即发送
+        seq = new int[max];
         left=0;
         right=0;
         size=0;
@@ -30,10 +35,11 @@ public class Window {
         }
     }
 
-    public void push(byte element){
+    public void push(byte element,int seq){
         if(!isFull()){
             data[right] = element ;
             delay[right]= 0;
+            this.seq[right]=seq;
             right= (right+1)%max;
             size++;
         }
@@ -97,6 +103,15 @@ public class Window {
             System.out.println("队列为空");
             return 0;
         }
+    }
+
+    public int getSeq(int i){
+        if(!isEmpty()){
+            return seq[(left+i)%max];
+        } else {
+            System.out.println("get方法队列为空");
+        }
+        return 0;
     }
 
 

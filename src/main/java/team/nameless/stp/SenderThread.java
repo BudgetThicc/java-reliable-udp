@@ -78,7 +78,8 @@ public class SenderThread implements Runnable{
 
     private void loadWindow(){
         while(outWindow.size<windowSize&&dataPointer<data.length){
-            outWindow.push(data[dataPointer]);
+            outWindow.push(data[dataPointer],this.seq);//将数据读入window的同时为其编号seq
+            this.seq++;
             dataPointer++;
         }
     }
@@ -87,20 +88,19 @@ public class SenderThread implements Runnable{
         outWindow.clear(i);//清除前i个字节
     }
 
-    private void sendSeg(){
+    private void sendSeg(int seqOfSeg){
         try {
-            sendSTPSeg(outSeg,false,false,seq,ack);
+            sendSTPSeg(outSeg,false,false,seqOfSeg,ack);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public synchronized void sendSTPSeg(byte[] data, boolean isSYN, boolean isFIN , int seq, int ack) throws IOException {
+    public void sendSTPSeg(byte[] data, boolean isSYN, boolean isFIN , int seq, int ack) throws IOException {
         STPsegement stpSegement = new STPsegement(data,isSYN,isFIN,seq,ack);
         DatagramPacket outPacket = new DatagramPacket(stpSegement.getByteArray(),
                 stpSegement.getByteArray().length,toAdd,toPort);
         this.socket.send(outPacket);
-        this.seq+=stpSegement.getDataLength();
         //for debugging.....
         System.out.println("Send: seq:"+seq+" "+"ack:"+ack);
         System.out.println();
@@ -110,6 +110,7 @@ public class SenderThread implements Runnable{
     private void sendWindow(){
         int pointer=0;
         int segPointer=0;
+        int seqOfSeg=-1;//一个报文的seq，-1则为未采集状态，应从window中对应位置字节得到seq
         while(pointer<outWindow.size){//遍历outWindow
             while(!outWindow.canSent(pointer)) {//跳过还不可发送的报文
                 pointer++;
@@ -120,18 +121,20 @@ public class SenderThread implements Runnable{
                 break;
 
             outSeg[segPointer]=outWindow.get(pointer);//向下一个要发送的报文中推送数据
+            if(seqOfSeg==-1){seqOfSeg=outWindow.getSeq(pointer);}//若所推送字节为第一个字节，将报文seq设为其seq
 
             outWindow.setDelay(pointer,RTT);//推送过的数据对应sent位标为true
             segPointer++;
             pointer++;
             if(segPointer>=outSeg.length){
-                sendSeg();
+                sendSeg(seqOfSeg);
                 outSeg=new byte[outSeg.length];
                 segPointer=0;
+                seqOfSeg=-1;
             }
         }
         if(segPointer!=0){//pointer遍历完而segPointer不为0，说明有最后一个碎片数据段
-            sendSeg();
+            sendSeg(seqOfSeg);
             outSeg=new byte[outSeg.length];
         }
     }
@@ -157,7 +160,7 @@ public class SenderThread implements Runnable{
     private void establish(){
         try {
             this.sendSTPSeg(new byte[0], true, false, this.seq, 0);//send SYN the first handshake
-            this.seq++;
+            this.seq++;//因为还不涉及到window，手动增加seq
             System.out.print("Handshaking:");
             while (true) {
                 System.out.print(".");
@@ -176,7 +179,7 @@ public class SenderThread implements Runnable{
     private void close() {
         try {
             sendSTPSeg(new byte[0],false,true,this.seq,this.ack); //F
-            this.seq++;
+            this.seq++;//不涉及window，手动增加seq
             System.out.print("Handshaking:");
             while(true){//等待listener回调
                 System.out.print(".");
@@ -196,7 +199,7 @@ public class SenderThread implements Runnable{
     public void run(){
         initListener();
         while(!readyListen){};//等待listener准备完成
-        establish();//握手前还无需计时？
+//        establish();//握手前还无需计时？
         initTimer();
         while(socket!=null){
             loadWindow();
