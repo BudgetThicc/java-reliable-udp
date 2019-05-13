@@ -26,6 +26,7 @@ public class ListenerThread implements Runnable{
             try {
                 this.socket.receive(rcvPacket);
             } catch (SocketException e) {
+                System.out.println("Listener Closed");
                 break;
                 //socket被关闭，直接退出监听，socket若非正常关闭也由sender主线程处理
             } catch (IOException e) {

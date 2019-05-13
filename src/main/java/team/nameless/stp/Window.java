@@ -4,13 +4,13 @@ public class Window {
     int left=0;
     int right=0;
     byte[] data;
-    private boolean[] sent;
+    private int[] delay;
     public int size;
-    private int max;
+    private final int max;//按作业要求不实现可变窗口，故为了保证安全性max设为final
     public Window(int max){
         this.max= max;
         data = new byte[max];
-        sent = new boolean[max];
+        delay = new int[max];//初始化发送延迟为0，即socket取到后立即发送
         left=0;
         right=0;
         size=0;
@@ -33,7 +33,7 @@ public class Window {
     public void push(byte element){
         if(!isFull()){
             data[right] = element ;
-            sent[right]= false;
+            delay[right]= 0;
             right= (right+1)%max;
             size++;
         }
@@ -42,13 +42,14 @@ public class Window {
         }
     }
 
-    public void clear(int i){
+    public void clear(int i){//收到ack，window移动，数据退栈
+        //todo：window的剩余delay值计算得出新RTT
         i=Math.abs(i);
-        if(i>=size){
+        if(i>size){
             left=0;
             right=0;
             size=0;
-            sent = new boolean[max];
+            delay = new int[max];
         }else{
             left=(left+i)%max;
             size-=i;
@@ -66,10 +67,10 @@ public class Window {
         return element;
     }
 
-    public boolean isSent(int i){
+    public boolean canSent(int i){
         boolean element;
         if(!isEmpty()){
-            element = sent[(left+i)%max];
+            element = delay[(left+i)%max]==0;
             return element;
         } else {
             System.out.println("队列为空");
@@ -77,23 +78,27 @@ public class Window {
         return false;
     }
 
-    public void sent(int i){
+    public void setDelay(int i,int RTT){
+        if(size==0) return;
         i=i%size;
         if(!isEmpty()){
-            sent[(left+i)%max]=true;
+            delay[(left+i)%max]=RTT;
         } else {
             System.out.println("队列为空");
         }
     }
 
-    public void unSent(int i){
+    public int getDelay(int i){
+        if(size==0) return 0;
         i=i%size;
         if(!isEmpty()){
-            sent[(left+i)%max]=false;
+            return delay[(left+i)%max];
         } else {
             System.out.println("队列为空");
+            return 0;
         }
     }
+
 
     public boolean isEmpty(){
         return size==0;
@@ -103,4 +108,5 @@ public class Window {
         return size==max;
     }
 
+    public int getMax(){return max;}
 }

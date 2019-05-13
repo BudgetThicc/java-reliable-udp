@@ -22,8 +22,10 @@ public class SenderThread implements Runnable{
     int acked;
     int seq;
     int ack;
+    int RTT=20;//单位为0.1秒，因timer执行精度为0.1秒
 
     Thread listenerThread;
+    Thread timerThread;
 
     boolean isFIN,isSYN,readyListen;
 
@@ -68,6 +70,12 @@ public class SenderThread implements Runnable{
         listenerThread.start();
     }
 
+    private void initTimer(){
+        TimerThread timer=new TimerThread(100,outWindow);
+        timerThread=new Thread(timer);
+        timerThread.start();
+    }
+
     private void loadWindow(){
         while(outWindow.size<windowSize&&dataPointer<data.length){
             outWindow.push(data[dataPointer]);
@@ -77,9 +85,6 @@ public class SenderThread implements Runnable{
 
     private void dumpWindow(int i){
         outWindow.clear(i);//清除前i个字节
-        //todo:清除前i个计时器
-        //todo:计时器，到点对window中数据unsent。
-
     }
 
     private void sendSeg(){
@@ -106,7 +111,7 @@ public class SenderThread implements Runnable{
         int pointer=0;
         int segPointer=0;
         while(pointer<outWindow.size){//遍历outWindow
-            while(outWindow.isSent(pointer)) {//跳过已发送的报文
+            while(!outWindow.canSent(pointer)) {//跳过还不可发送的报文
                 pointer++;
                 if(pointer>=outWindow.size)
                     break;
@@ -116,7 +121,7 @@ public class SenderThread implements Runnable{
 
             outSeg[segPointer]=outWindow.get(pointer);//向下一个要发送的报文中推送数据
 
-            outWindow.sent(pointer);//推送过的数据对应sent位标为true
+            outWindow.setDelay(pointer,RTT);//推送过的数据对应sent位标为true
             segPointer++;
             pointer++;
             if(segPointer>=outSeg.length){
@@ -191,12 +196,14 @@ public class SenderThread implements Runnable{
     public void run(){
         initListener();
         while(!readyListen){};//等待listener准备完成
-        establish();
+        establish();//握手前还无需计时？
+        initTimer();
         while(socket!=null){
             loadWindow();
             sendWindow();
             if(dataPointer>=data.length&&outWindow.size==0){
-                close();
+                close();//该操作将关闭Listener线程
+                timerThread.interrupt();
                 break;
             }
         }
