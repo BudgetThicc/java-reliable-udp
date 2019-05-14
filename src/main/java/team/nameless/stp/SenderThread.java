@@ -10,7 +10,7 @@ public class SenderThread implements Runnable{
     byte[] inSeg;//seq,ack等应答数据的一个报文的保存器
     byte[] outSeg;//发送出去的报文
     Window outWindow;//等待发送的队列
-    int windowSize;
+    int MWS;
 
     byte[] data;
     int dataPointer;
@@ -22,22 +22,25 @@ public class SenderThread implements Runnable{
     int acked;
     int seq;
     int ack;
-    int RTT=20;//单位为0.1秒，因timer执行精度为0.1秒
+    int timeout=20;//单位为0.1秒，因timer执行精度为0.1秒
 
     Thread listenerThread;
     Thread timerThread;
 
     boolean isFIN,isSYN,readyListen;
 
-    SenderThread(int windowSize,int MSS,int port,String ip){
+    SenderThread(int MWS,int MSS,int port,String ip,int timeout){
         inSeg=new byte[MSS+HEADER_LENGTH];
         outSeg=new byte[MSS];
-        outWindow=new Window(windowSize);
-        this.windowSize=windowSize;
+        outWindow=new Window(MWS);
+        this.MWS=MWS;
+        this.timeout=timeout/100;
+
         data="".getBytes();
         dataPointer=0;
         try {
             socket = new DatagramSocket(port,InetAddress.getByName(ip));
+            PLD.setSocket(socket);
         }catch (UnknownHostException e) {
             e.printStackTrace();
         } catch (SocketException e){
@@ -77,7 +80,7 @@ public class SenderThread implements Runnable{
     }
 
     private void loadWindow(){
-        while(outWindow.size<windowSize&&dataPointer<data.length){
+        while(outWindow.size<MWS&&dataPointer<data.length){
             outWindow.push(data[dataPointer],this.seq);//将数据读入window的同时为其编号seq
             this.seq++;
             dataPointer++;
@@ -100,7 +103,7 @@ public class SenderThread implements Runnable{
         STPsegement stpSegement = new STPsegement(data,isSYN,isFIN,seq,ack);
         DatagramPacket outPacket = new DatagramPacket(stpSegement.getByteArray(),
                 stpSegement.getByteArray().length,toAdd,toPort);
-        this.socket.send(outPacket);
+        PLD.send(outPacket);//sender发出，经过PLD
         //for debugging.....
         System.out.println("Send: seq:"+seq+" "+"ack:"+ack);
         System.out.println();
@@ -123,7 +126,7 @@ public class SenderThread implements Runnable{
             outSeg[segPointer]=outWindow.get(pointer);//向下一个要发送的报文中推送数据
             if(seqOfSeg==-1){seqOfSeg=outWindow.getSeq(pointer);}//若所推送字节为第一个字节，将报文seq设为其seq
 
-            outWindow.setDelay(pointer,RTT);//推送过的数据对应sent位标为true
+            outWindow.setDelay(pointer,timeout);//推送过的数据对应sent位标为true
             segPointer++;
             pointer++;
             if(segPointer>=outSeg.length){
@@ -199,7 +202,7 @@ public class SenderThread implements Runnable{
     public void run(){
         initListener();
         while(!readyListen){};//等待listener准备完成
-//        establish();//握手前还无需计时？
+        establish();//握手完成前不发生drop
         initTimer();
         while(socket!=null){
             loadWindow();

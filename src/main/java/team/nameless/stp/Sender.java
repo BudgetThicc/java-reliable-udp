@@ -12,18 +12,23 @@ public class Sender{
         int rcvPort=Integer.parseInt(args[1]);
         String filename=args[2];
         int MSS=Integer.parseInt(args[3]);
-        int windowSize=Integer.parseInt((args[4]));
+        int MWS=Integer.parseInt((args[4]));
+        int timeout=Integer.parseInt(args[5]);
+        double pdrop=Double.parseDouble(args[6]);
+        long seed=Long.parseLong(args[7]);
 
-        SenderThread thread=new SenderThread(windowSize,MSS,PORT,IP);
-        thread.setDes(rcvIP,rcvPort);
+        SenderThread sender=new SenderThread(MWS,MSS,PORT,IP,timeout);
+        sender.setDes(rcvIP,rcvPort);
+        PLD.setRandom(seed,pdrop);
+
 
         try {
-            thread.setData(readFile(filename));
+            sender.setData(readFile(filename));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        Thread t=new Thread(thread);
+        Thread t=new Thread(sender);
         t.start();
 
     }

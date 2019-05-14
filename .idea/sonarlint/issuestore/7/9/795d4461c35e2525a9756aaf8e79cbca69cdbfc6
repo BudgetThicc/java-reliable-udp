@@ -1,0 +1,36 @@
+
+T
+squid:S106i"9Replace this use of System.out or System.err by a logger.(ø²­¾ıÿÿÿÿ
+?squid:S11488"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+U
+squid:S106Á"9Replace this use of System.out or System.err by a logger.(††–Ğüÿÿÿÿ
+@squid:S1148¯"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+U
+squid:S106¼"9Replace this use of System.out or System.err by a logger.(ªÓ¼áşÿÿÿÿ
+U
+squid:S106¹"9Replace this use of System.out or System.err by a logger.(å‡ëÇøÿÿÿÿ
+P
+squid:S106¤"9Replace this use of System.out or System.err by a logger.(¾ŒÒ
+:squid:S1659"#Declare "isSYN" on a separate line.(Ï£ˆ
+nsquid:S00117 "QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(æÇçßüÿÿÿÿ
+Lsquid:EmptyStatementUsageCheckÉ"Remove this empty statement.(íÆÉ·ÿÿÿÿÿ
+?squid:S1148*"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+[squid:S2147+"DCombine this catch with the one at line 41, which has the same body.(»ªÁ¥
+U
+squid:S106¦"9Replace this use of System.out or System.err by a logger.(å‡ëÇøÿÿÿÿ
+tsquid:S3008"XRename this field "HEADER_LENGTH" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(šœÜ›ıÿÿÿÿ
+@squid:S1148Ã"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+ksquid:S00116"NRename this field "RTT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(×€ø©ûÿÿÿÿ
+Gsquid:S00108É")Either remove or fill this block of code.(íÆÉ·ÿÿÿÿÿ
+?squid:S1148,"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+U
+squid:S106©"9Replace this use of System.out or System.err by a logger.(ªÓ¼áşÿÿÿÿ
+P
+squid:S106­"9Replace this use of System.out or System.err by a logger.(¬£§ğ
+?squid:S1148_"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+P
+squid:S106·"9Replace this use of System.out or System.err by a logger.(¾ŒÒ
+@squid:S1659")Declare "readyListen" on a separate line.(Ï£ˆ
+T
+squid:S106j"9Replace this use of System.out or System.err by a logger.(ªÓ¼áşÿÿÿÿ
+Zsquid:UnusedPrivateMethod ".Remove this unused private "establish" method.(Ï¾Å18Ù‹ƒ«-
