@@ -10,8 +10,11 @@ public class PLD {
     static double pdrop;
     static DatagramSocket socket;
 
-    static void setRandom(long seed,double _pdrop){
+    static void setRandom(long seed){
         random=new Random(seed);
+    }
+
+    static void setPdrop(double _pdrop){
         pdrop=_pdrop;
     }
 

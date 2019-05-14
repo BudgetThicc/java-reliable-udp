@@ -19,8 +19,9 @@ public class Sender{
 
         SenderThread sender=new SenderThread(MWS,MSS,PORT,IP,timeout);
         sender.setDes(rcvIP,rcvPort);
-        PLD.setRandom(seed,pdrop);
 
+        PLD.setRandom(seed);
+        PLD.setPdrop(pdrop);
 
         try {
             sender.setData(readFile(filename));

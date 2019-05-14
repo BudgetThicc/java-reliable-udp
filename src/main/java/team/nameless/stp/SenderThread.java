@@ -187,6 +187,8 @@ public class SenderThread implements Runnable{
             while(true){//等待listener回调
                 System.out.print(".");
                 if(this.isFIN){//get F+A
+                    //todo：由于最后的报文FIN和SYN都为false，PLD无法判断，可能会丢弃，故此处暂时以PLD丢弃率设为0来解决
+                    PLD.setPdrop(0);
                     this.sendSTPSeg(new byte[0],false,false,this.seq,this.ack);
                     System.out.println();
                     break;
