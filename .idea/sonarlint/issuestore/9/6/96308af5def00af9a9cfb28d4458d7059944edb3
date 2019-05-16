@@ -1,0 +1,32 @@
+
+fsquid:S00116"NRename this field "MSS" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ªêóà
+nsquid:S00117x"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Äâ½’şÿÿÿÿ
+O
+squid:S106F"9Replace this use of System.out or System.err by a logger.(¶í„ÿ
+T
+squid:S106@"9Replace this use of System.out or System.err by a logger.(ªÓ¼áşÿÿÿÿ
+O
+squid:S106a"9Replace this use of System.out or System.err by a logger.(Îêéõ
+Bsquid:S1068"+Remove this unused "isSYNed" private field.(Ò•¥…
+msquid:S1450"VRemove the "isSYNed" field and declare it as a local variable in the relevant methods.(Ò•¥…
+T
+squid:S106p"9Replace this use of System.out or System.err by a logger.(›‡öóúÿÿÿÿ
+ssquid:S00116"VRename this field "InAndOutSTP" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(”â²ıÿÿÿÿ
+tsquid:S3008"XRename this field "STPheaderSize" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(îÚ×øÿÿÿÿ
+Tsquid:S1197 "8Move the array designator from the variable to the type.(Ø ”òıÿÿÿÿ
+nsquid:S00116"VRename this field "receiver_ip" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Ø°ï›
+T
+squid:S106#"9Replace this use of System.out or System.err by a logger.(â¥¤ñÿÿÿÿÿ
+]squid:S1192B"FDefine a constant instead of duplicating this literal " ack:" 3 times.(Îêéõ
+T
+squid:S106}"9Replace this use of System.out or System.err by a logger.(Æì° úÿÿÿÿ
+T
+squid:S106)"9Replace this use of System.out or System.err by a logger.(â¥¤ñÿÿÿÿÿ
+psquid:S3008"ZRename this field "INPUT_ERROR_MSG" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(›ä¯^
+usquid:S00116"XRename this field "receiver_port" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ºØ§şÿÿÿÿ
+lsquid:S00116"TRename this field "sender_ip" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ªú«ß
+O
+squid:S106B"9Replace this use of System.out or System.err by a logger.(Îêéõ
+nsquid:S00116"VRename this field "sender_port" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(´šÏ
+U
+squid:S106ˆ"9Replace this use of System.out or System.err by a logger.(ø²­¾ıÿÿÿÿ

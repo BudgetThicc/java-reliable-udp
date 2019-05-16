@@ -7,16 +7,21 @@ import java.net.SocketException;
 import java.net.SocketTimeoutException;
 
 public class ListenerThread implements Runnable{
+    String RECEIVED="Number of ACKs received: ";
+
     DatagramSocket socket;
     byte[] inSeg;
     SenderThread sender;
     int acked;
 
-    ListenerThread(SenderThread sender){
+    Logger logger;
+
+    ListenerThread(SenderThread sender,Logger logger){
         this.socket=sender.socket;
         this.inSeg=new byte[sender.inSeg.length];
         this.sender=sender;
         this.acked=0;
+        this.logger=logger;
     }
 
     public void run() {
@@ -38,13 +43,16 @@ public class ListenerThread implements Runnable{
             if(rcvSTPsegement.getSYN()) {
                 handleNorm(rcvSTPsegement);
                 handleSYN();
+                logger.addLog("recv","SA",rcvSTPsegement.getSeq(),0,rcvSTPsegement.getAck());
             }else if(rcvSTPsegement.getFIN()){
                 handleNorm(rcvSTPsegement);
                 handleFIN();
+                logger.addLog("recv","FA",rcvSTPsegement.getSeq(),0,rcvSTPsegement.getAck());
             }else {
                 handleNorm(rcvSTPsegement);
+                logger.addLog("recv","A",rcvSTPsegement.getSeq(),0,rcvSTPsegement.getAck());
             }
-
+            logger.addAttr(RECEIVED,1);
         }
     }
 

@@ -1,0 +1,8 @@
+
+>squid:S2189""Add an end condition to this loop.(˜ïˆžÿÿÿÿÿ
+[
+squid:S106"9Replace this use of System.out or System.err by a logger.(¦Å”©úÿÿÿÿ8ŽÔ¡õ«-
+[
+squid:S106"9Replace this use of System.out or System.err by a logger.(ÝßÅŒýÿÿÿÿ8ýµ¬õ«-
+isquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(°¹ÊÀ8ö¿ õ«-
+csquid:S2142"FEither re-interrupt this method or rethrow the "InterruptedException".(³±‘d8ŽÔ¡õ«-

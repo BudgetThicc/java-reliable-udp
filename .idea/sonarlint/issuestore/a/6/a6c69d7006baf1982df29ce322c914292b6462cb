@@ -1,10 +1,10 @@
 
+?squid:S1148!"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
 O
 squid:S106%"9Replace this use of System.out or System.err by a logger.(¸ù£Õ
+>squid:S2189""Add an end condition to this loop.(˜ïˆžÿÿÿÿÿ
+esquid:UselessImportCheck"<Remove this unused import 'java.net.SocketTimeoutException'.(Ú©ÝÔþÿÿÿÿ
 O
 squid:S106"9Replace this use of System.out or System.err by a logger.(»ýÊ…
 T
 squid:S1068"9Replace this use of System.out or System.err by a logger.(éüçûÿÿÿÿ
-?squid:S1148!"#Use a logger to log this exception.(€ÉÔ…ýÿÿÿÿ
-esquid:UselessImportCheck"<Remove this unused import 'java.net.SocketTimeoutException'.(Ú©ÝÔþÿÿÿÿ
->squid:S2189""Add an end condition to this loop.(˜ïˆžÿÿÿÿÿ

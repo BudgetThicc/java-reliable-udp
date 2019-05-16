@@ -1,0 +1,9 @@
+
+[squid:S2147"DCombine this catch with the one at line 17, which has the same body.(´ú§â
+[squid:S2147"DCombine this catch with the one at line 17, which has the same body.(ï­£Ä
+Wsquid:S2259"@A "NullPointerException" could be thrown; "re" is nullable here.(™‹Ì
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+Tsquid:S1197"8Move the array designator from the variable to the type.(¡şÏÖøÿÿÿÿ
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ

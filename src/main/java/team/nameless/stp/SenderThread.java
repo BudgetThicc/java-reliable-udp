@@ -6,7 +6,11 @@ import java.net.*;
 
 public class SenderThread implements Runnable{
     static int HEADER_LENGTH=10;
-
+    static String SENT="Number of data segments SENT: ";
+    static String BYTESSENT="Bytes of data to be transferred: ";
+    static String RESENT="Number of data segments RESENT: ";
+    static String DROPPED="Number of data segments DROPPED: ";
+    static String RECEIVED="Number of ACKs received: ";
     byte[] inSeg;//seq,ack等应答数据的一个报文的保存器
     byte[] outSeg;//发送出去的报文
     Window outWindow;//等待发送的队列
@@ -26,6 +30,8 @@ public class SenderThread implements Runnable{
 
     Thread listenerThread;
     Thread timerThread;
+    Logger logger;
+    Thread loggerThread;
 
     boolean isFIN,isSYN,readyListen;
 
@@ -34,7 +40,7 @@ public class SenderThread implements Runnable{
         outSeg=new byte[MSS];
         outWindow=new Window(MWS);
         this.MWS=MWS;
-        this.timeout=timeout/100;
+        this.timeout=timeout/10;//一个tick占用10ms
 
         data="".getBytes();
         dataPointer=0;
@@ -67,23 +73,12 @@ public class SenderThread implements Runnable{
         System.arraycopy(data,0,this.data,0,data.length);
     }
 
-    private void initListener(){
-        ListenerThread listener=new ListenerThread(this);
-        listenerThread=new Thread(listener);
-        listenerThread.start();
-    }
-
-    private void initTimer(){
-        TimerThread timer=new TimerThread(100,outWindow);
-        timerThread=new Thread(timer);
-        timerThread.start();
-    }
-
     private void loadWindow(){
         while(outWindow.size<MWS&&dataPointer<data.length){
             outWindow.push(data[dataPointer],this.seq);//将数据读入window的同时为其编号seq
             this.seq++;
             dataPointer++;
+            logger.addAttr(BYTESSENT,1);
         }
     }
 
@@ -108,12 +103,14 @@ public class SenderThread implements Runnable{
         System.out.println("Send: seq:"+seq+" "+"ack:"+ack);
         System.out.println();
         //for debugging.....
+        String packType="";
     }
 
-    private void sendWindow(){
+    private void sendWindow(){//遍历一个window中所有数据并包装成stpSegment
         int pointer=0;
         int segPointer=0;
         int seqOfSeg=-1;//一个报文的seq，-1则为未采集状态，应从window中对应位置字节得到seq
+        boolean resentSeg=false;//报文是否含有需重传字节，若有，则判定为重传报文
         while(pointer<outWindow.size){//遍历outWindow
             while(!outWindow.canSent(pointer)) {//跳过还不可发送的报文
                 pointer++;
@@ -125,19 +122,27 @@ public class SenderThread implements Runnable{
 
             outSeg[segPointer]=outWindow.get(pointer);//向下一个要发送的报文中推送数据
             if(seqOfSeg==-1){seqOfSeg=outWindow.getSeq(pointer);}//若所推送字节为第一个字节，将报文seq设为其seq
+            if(outWindow.isResent(pointer)){resentSeg=true;}
 
             outWindow.setDelay(pointer,timeout);//推送过的数据对应sent位标为true
             segPointer++;
             pointer++;
             if(segPointer>=outSeg.length){
                 sendSeg(seqOfSeg);
+                logger.addLog("send","D",seqOfSeg,segPointer,ack);
+                logger.addAttr(SENT,1);
+                if(resentSeg)
+                    logger.addAttr(RESENT,1);
+
                 outSeg=new byte[outSeg.length];
                 segPointer=0;
                 seqOfSeg=-1;
+                resentSeg=false;
             }
         }
         if(segPointer!=0){//pointer遍历完而segPointer不为0，说明有最后一个碎片数据段
             sendSeg(seqOfSeg);
+            logger.addLog("send","D",seqOfSeg,segPointer,ack);
             outSeg=new byte[outSeg.length];
         }
     }
@@ -163,12 +168,14 @@ public class SenderThread implements Runnable{
     private void establish(){
         try {
             this.sendSTPSeg(new byte[0], true, false, this.seq, 0);//send SYN the first handshake
+            logger.addLog("send","S",seq,0,ack);
             this.seq++;//因为还不涉及到window，手动增加seq
             System.out.print("Handshaking:");
             while (true) {
-                System.out.print(".");
+                Thread.sleep(1);
                 if (this.isSYN) {//等待listener回调
                     this.sendSTPSeg(new byte[0], false, false, this.seq, this.ack);//send the third handshake
+                    logger.addLog("send","A",seq,0,ack);
                     System.out.println();
                     break;
                 }
@@ -176,21 +183,24 @@ public class SenderThread implements Runnable{
             System.out.println("////////////SYNed////////////");
         }catch (IOException e){
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     private void close() {
         try {
             sendSTPSeg(new byte[0],false,true,this.seq,this.ack); //F
+            logger.addLog("send","F",seq,0,ack);
             this.seq++;//不涉及window，手动增加seq
             System.out.print("Handshaking:");
             while(true){//等待listener回调
-                System.out.print(".");
+                Thread.sleep(1);
                 if(this.isFIN){//get F+A
                     //todo：由于最后的报文FIN和SYN都为false，PLD无法判断，可能会丢弃，故此处暂时以PLD丢弃率设为0来解决
                     PLD.setPdrop(0);
                     this.sendSTPSeg(new byte[0],false,false,this.seq,this.ack);
-                    System.out.println();
+                    logger.addLog("send","A",seq,0,ack);
                     break;
                 }
             }
@@ -198,12 +208,14 @@ public class SenderThread implements Runnable{
             System.out.println("////////////FINed////////////");
         } catch (IOException e) {
             e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
     public void run(){
+        initLogger();
         initListener();
-        while(!readyListen){};//等待listener准备完成
         establish();//握手完成前不发生drop
         initTimer();
         while(socket!=null){
@@ -212,8 +224,41 @@ public class SenderThread implements Runnable{
             if(dataPointer>=data.length&&outWindow.size==0){
                 close();//该操作将关闭Listener线程
                 timerThread.interrupt();
+                endLogger();
                 break;
             }
         }
+    }
+
+    private void initListener(){
+        ListenerThread listener=new ListenerThread(this,logger);
+        listenerThread=new Thread(listener);
+        listenerThread.start();
+        while(!readyListen){};//等待listener准备完成
+    }
+
+    private void initTimer(){
+        TimerThread timer=new TimerThread(10,outWindow,logger);
+        timerThread=new Thread(timer);
+        timerThread.start();
+    }
+
+    private void initLogger(){
+        logger=new Logger("sender_log.txt");
+        PLD.setLogger(logger);
+        loggerThread=new Thread(logger);
+        loggerThread.start();//此处可不必等待，顶多日志输出有些许延迟，就算是nohup指令也无法避免这一点
+    }
+
+    private void endLogger(){
+        loggerThread.interrupt();
+        logger.addLog("Finish sending!");
+        logger.addAttr(SENT,-logger.getAttr(RESENT));//减去重传的报文数
+        logger.addLog_Attr(BYTESSENT);
+        logger.addLog_Attr(SENT);
+        logger.addLog_Attr(DROPPED);
+        logger.addLog_Attr(RESENT);
+        logger.addLog_Attr(RECEIVED);
+        logger.write();
     }
 }

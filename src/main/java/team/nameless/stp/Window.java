@@ -7,6 +7,7 @@ public class Window {
     byte[] data;
     private int[] delay;
     private int[] seq;
+    private boolean[] resent;
 
     public int size;
     private final int max;//按作业要求不实现可变窗口，故为了保证安全性max设为final
@@ -16,6 +17,7 @@ public class Window {
         data = new byte[max];
         delay = new int[max];//初始化发送延迟为0，即socket取到后立即发送
         seq = new int[max];
+        resent=new boolean[max];
         left=0;
         right=0;
         size=0;
@@ -40,6 +42,7 @@ public class Window {
             data[right] = element ;
             delay[right]= 0;
             this.seq[right]=seq;
+            resent[right]=false;
             right= (right+1)%max;
             size++;
         }
@@ -89,6 +92,7 @@ public class Window {
         i=i%size;
         if(!isEmpty()){
             delay[(left+i)%max]=RTT;
+            resent[(left+i)%max]=true;
         } else {
             System.out.println("队列为空");
         }
@@ -112,6 +116,15 @@ public class Window {
             System.out.println("get方法队列为空");
         }
         return 0;
+    }
+
+    public boolean isResent(int i){
+        if(!isEmpty()){
+            return resent[(left+i)%max];
+        } else {
+            System.out.println("get方法队列为空");
+        }
+        return false;
     }
 
 

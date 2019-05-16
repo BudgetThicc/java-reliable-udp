@@ -1,0 +1,7 @@
+
+isquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(ü—âŠ
+ksquid:S3008"ORename this field "PORT" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(„³é€şÿÿÿÿ
+psquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(íüòõ8Òúß£«-
+hsquid:S2095'"QUse try-with-resources or close this "BufferedInputStream" in a "finally" clause.(±ı²
+?squid:S1148"#Use a logger to log this exception.(€ÉÔ…ıÿÿÿÿ
+isquid:S3008	"MRename this field "IP" to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(­×®Íùÿÿÿÿ
